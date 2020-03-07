@@ -1,0 +1,92 @@
+from django.shortcuts import render
+from .models import Movie
+from .engine import get_similar
+from math import ceil
+import csv,io
+# Create your views here.
+from django.http import HttpResponse
+from .models import Movie
+
+
+# pending
+def index(request):
+    Movies = Movie.objects.all()
+    # print(type(Movies))
+    n = len(Movies)
+    nSlides = n//4 + ceil((n/4)-(n//4))
+    params = {'no_of_slides': nSlides, 'range': range(1, nSlides), 'movie': Movies}
+    return render(request, 'blog/index.html',params)
+
+
+# Search done
+def search(request):
+    if request.method == "POST":
+        name = request.POST.get('myvalue','default')
+        movielist1 = get_similar(name, 5)
+        movielist = movielist1.head(10)
+        print(name)
+        # n = len(movielist)
+    dicdata = movielist.to_dict()
+    # print(dicdata)
+    # print(type(dicdata))
+    # n = len(dicdata)
+    # nSlides = n//4 + ceil((n/4)-(n//4))
+    # params = {'no_of_slides':nSlides,'range': range(1,nSlides),'movie': dicdata}
+    params = {'movie': dicdata}
+    return render(request, 'blog/search.html', params)
+
+# for location press
+def home(request):
+    movielist = get_similar("Pedarayudu", 4)
+    dicdata = movielist.to_dict()
+    print(movielist)
+    print(type(movielist),"laxman")
+    n = len(dicdata)
+    print(movielist)
+    nSlides = n//4 + ceil((n/4)-(n//4))
+    params = {'no_of_slides':nSlides,'range': range(1,nSlides),'movie': dicdata}
+    return render(request,'blog/login.html',params)
+
+
+# Done with recommedation
+global userinput
+global userratings
+global abc
+global params
+# Recommendation Engine call will go from here
+def recommend(request):
+    userinput = ""
+    userratings = ""
+    params = {}
+    if request.method == "POST":
+        userinput += request.POST.get('myvalue1')
+        userratings += request.POST.get('myvalue2')
+        strtoint = int(userratings)
+        movielist = get_similar(userinput, strtoint)
+        dicdata = movielist.to_dict()
+        params = {'movie': dicdata}
+    return render(request, 'blog/recommend.html', params)
+
+
+# For SignUp page request
+def signup(request):
+    return render(request, 'blog/signup.html')
+
+
+# for Login Page request
+def login(request):
+    Movies = Movie.objects.all()
+    # print(Movies)
+    n = len(Movies)
+    nSlides = n // 4 + ceil((n / 4) - (n // 4))
+    params = {'no_of_slides': nSlides, 'range': range(1, nSlides), 'movie': Movies}
+    return render(request, 'blog/login.html',params)
+
+
+# for Logout page request
+def logout(request):
+    return render(request, 'blog/logout.html')
+
+
+
+

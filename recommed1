@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title>SonyLivJarvis</title>
+      <style>
+<!--      star styling-->
+
+<!--      search bar style-->
+
+@media (min-width: 576px)
+.container {
+    max-width: 540px;
+    padding-top: 10px;
+}
+.form-control{
+    width:700px;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
+                      .active-cyan-3 input[type=text] {
+                                                          border: 1px solid #4dd0e1;
+                                                          box-shadow: 0 0 0 1px #4dd0e1;
+                                                        }
+
+
+
+<!--                                             start rating       -->
+  .star{
+          color: goldenrod;
+          font-size: 2.0rem;
+          margin-top: -25!important;
+          padding: 0 1rem; /* space out the stars */
+        }
+        .star::before{
+          content: '\2606';    /* star outline */
+          cursor: pointer;
+        }
+        .star.rated::before{
+          /* the style for a selected star */
+          content: '\2605';  /* filled star */
+        }
+
+        .stars{
+            counter-reset: rateme 0;
+            font-size: 2.0rem;
+            font-weight: 900;
+        }
+        .star.rated{
+            counter-increment: rateme 1;
+        }
+        .stars::after{
+            content: counter(rateme) '/5';
+        }
+
+
+
+
+      </style>
+      <script>
+
+         //initial setup
+        document.addEventListener('DOMContentLoaded', function(){
+            let stars = document.querySelectorAll('.star');
+            stars.forEach(function(star){
+                star.addEventListener('click', setRating);
+            });
+
+<!--            let rating = parseInt(document.querySelector('.stars').getAttribute('data-rating'));-->
+<!--            let target = stars[rating - 1];-->
+<!--            target.dispatchEvent(new MouseEvent('click'));-->
+        });
+
+
+
+<!--        function setRating(ev){-->
+<!--            let span = ev.currentTarget;-->
+<!--            let stars = document.querySelectorAll('.star');-->
+<!--            let match = false;-->
+<!--            let num = 0;-->
+<!--            stars.forEach(function(star, index){-->
+<!--                if(match){-->
+<!--                    star.classList.remove('rated');-->
+<!--                }else{-->
+<!--                    star.classList.add('rated');-->
+<!--                }-->
+<!--                //are we currently looking at the span that was clicked-->
+<!--                if(star === span){-->
+<!--                    match = true;-->
+<!--                    num = index + 1;-->
+<!--                }-->
+<!--            });-->
+<!--            document.querySelector('.stars').setAttribute('data-rating', num);-->
+<!--            console.log(num)-->
+<!--        }-->
+      </script>
+  </head>
+  <body>
+
+<!--Bootstrap starts from here-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="http://127.0.0.1:8000/">Jarvis</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="index/">Home <span class="sr-only">(current)</span></a>
+            </li>
+              <li class="nav-item">
+                <a class="nav-link" href="">Shows</a>
+              </li>
+            <li class="nav-item">
+           <a class="nav-link" href="">Recommend</a>
+         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="login/">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="">SignOut</a>
+        </li>
+      </ul>
+<!--      <form class="form-inline my-2 my-lg-0">-->
+<!--        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
+<!--        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
+<!--      </form>-->
+    </div>
+  </nav>
+
+<!--Search bar-->
+<form action="{% url 'recommend' %}" method="POST">{% csrf_token %}
+    <div class="container">
+        <div class="active-cyan-4 mb-4">
+          <input class="form-control" type="text" name="myvalue1"  placeholder="Search" aria-label="Search" id="lax"><br/>
+            <input  type="text" name="myvalue2" placeholder="Rating"   id="lax1"><br/>
+<!-- <form method="post" action="{% url 'search' %}">{% csrf_token %}-->
+<!--            <input type="text" name="myvalue">-->
+<!--            <input type="submit" value="submit">-->
+<!--Rating star-->
+    <!-- alternate codepen version https://codepen.io/mad-d/pen/aJMPWr?editors=0010 -->
+<!--    <div class="stars" data-rating="">-->
+<!--        <span class="star">&nbsp;</span>-->
+<!--        <span class="star">&nbsp;</span>-->
+<!--        <span class="star">&nbsp;</span>-->
+<!--        <span class="star">&nbsp;</span>-->
+<!--        <span class="star">&nbsp;</span>-->
+<!--    </div>-->
+<!--            rating new lable-->
+
+            <br>
+            <input type="submit" value="submit">
+        </div>
+    </div>
+</form>
+
+  <div class="container carousel-inner no-padding">
+            <div class="carousel-item active">
+    <!-- Card one-->
+                {% for i in movie|slice:"1:"%}
+                <div class="col-xs-3 col-sm-3 col-md-3">
+                    <div class="card" style="width: 18rem;">
+<!--                      <img src="..." class="card-img-top" alt="...">-->
+                      <div class="card-body">
+                        <h5 class="card-title">{{i}}</h5>
+<!--                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                      </div>
+                    </div>
+                </div>
+                {% if forloop.counter|divisibleby:3 and forloop.counter > 0 and not forloop.last%}
+            </div><div class="carousel-item">
+                {% endif %}
+                {% endfor %}
+
+            </div>
+    </div>
+<ul>
+{% for i in d.items %}
+    <li>{{i}}</li>
+{% endfor %}
+</ul>
+
+
+
+<!--</footer>-->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </body>
+</html>
